@@ -95,4 +95,5 @@ RUN cd ~/ffmpeg_sources && \
 	cd ~/ffmpeg_sources && \
 	rm -rf /ffmpeg_sources/ffmpeg
 
-ENV PATH "$HOME/bin:$PATH"
+#OR symlink?
+ENV PATH /root/bin:$PATH
