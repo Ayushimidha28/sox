@@ -15,7 +15,10 @@ RUN \
             --no-install-suggests \
 		autoconf automake build-essential libass-dev libfreetype6-dev \
 		libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libxcb1-dev libxcb-shm0-dev \
-		libxcb-xfixes0-dev pkg-config texinfo zlib1g-dev wget
+		libxcb-xfixes0-dev pkg-config texinfo zlib1g-dev wget \
+		
+# Yasm & libx264 & libmp3lame & libopus		
+		yasm libx264-dev libmp3lame-dev libopus-dev
 
 # # Clean up packages.
 #     && apt-get clean \
@@ -25,14 +28,6 @@ RUN \
 RUN mkdir ~/ffmpeg_sources
 WORKDIR ~/ffmpeg_sources
 
-# Yasm & libx264 & libmp3lame & libopus
-RUN apt-get install \ 
-            --yes \
-            --no-install-recommends \
-            --no-install-suggests \
-		yasm libx264-dev libmp3lame-dev libopus-dev
-
-
 # libx265
 RUN apt-get install -y cmake mercurial && \
 	cd ~/ffmpeg_sources && \
@@ -41,7 +36,9 @@ RUN apt-get install -y cmake mercurial && \
 	PATH="$HOME/bin:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED:bool=off ../../source && \
 	make && \
 	make install && \
-	make clean
+	make clean && \
+	cd ~/ffmpeg_sources && \
+	rm -rf /ffmpeg_sources/x265
 	
 # libfdk-aac
 RUN cd ~/ffmpeg_sources && \
@@ -52,7 +49,9 @@ RUN cd ~/ffmpeg_sources && \
 	./configure --prefix="$HOME/ffmpeg_build" --disable-shared && \
 	make && \
 	make install && \
-	make distclean
+	make distclean && \
+	cd ~/ffmpeg_sources && \
+	rm -rf /ffmpeg_sources/mstorsjo-fdk-aac*
 	
 # libvpx
 RUN cd ~/ffmpeg_sources && \
@@ -62,7 +61,9 @@ RUN cd ~/ffmpeg_sources && \
 	PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" --disable-examples --disable-unit-tests && \
 	PATH="$HOME/bin:$PATH" make && \
 	make install && \
-	make clean
+	make clean && \
+	cd ~/ffmpeg_sources && \
+	rm -rf /ffmpeg_sources/libvpx-1.5.0
 	
 # ffmpeg
 RUN cd ~/ffmpeg_sources && \
@@ -90,6 +91,6 @@ RUN cd ~/ffmpeg_sources && \
 	PATH="$HOME/bin:$PATH" make && \
 	make install && \
 	make distclean && \
-	hash -r
-	
-
+	hash -r && \
+	cd ~/ffmpeg_sources && \
+	rm -rf /ffmpeg_sources/ffmpeg
