@@ -94,3 +94,5 @@ RUN cd ~/ffmpeg_sources && \
 	hash -r && \
 	cd ~/ffmpeg_sources && \
 	rm -rf /ffmpeg_sources/ffmpeg
+
+ENV PATH "$HOME/bin:$PATH"
